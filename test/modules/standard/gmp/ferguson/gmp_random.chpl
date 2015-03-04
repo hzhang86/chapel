@@ -16,6 +16,3 @@ if printrandom then writeln(b);
 r.urandomm(b, n);
 if printrandom then writeln(b);
 
-delete r;
-delete b;
-delete n;

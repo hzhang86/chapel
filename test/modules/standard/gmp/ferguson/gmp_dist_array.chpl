@@ -44,16 +44,3 @@ modulus.nextprime(modulus);
 writeln(modulus);
 sum.mod(sum, modulus);
 writeln(sum);
-delete modulus;
-delete sum;
-
-// Release the array elements.
-forall a in A {
-  delete a;
-}
-forall b in B {
-  delete b;
-}
-forall c in C {
-  delete c;
-}
