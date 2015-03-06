@@ -344,7 +344,7 @@ module GMP {
         error = EFORMAT;
       }
     }
-    proc ref BigInt(num:BigInt) {
+    proc BigInt(ref num:BigInt) {
       if num.locale == here {
         mpz_init_set(this.mpz, num.mpz);
       } else {
@@ -359,12 +359,12 @@ module GMP {
     proc ~BigInt() { on this do mpz_clear(this.mpz); }
 
     // utility functions used below.
-    proc numLimbs:uint(64) {
+    proc ref numLimbs:uint(64) {
       var mpz_struct = this.mpz[1];
       return chpl_gmp_mpz_nlimbs(mpz_struct);
     }
 
-    proc mpzStruct():__mpz_struct {
+    proc ref mpzStruct():__mpz_struct {
       var ret:__mpz_struct;
       on this {
         ret = this.mpz[1];
@@ -374,7 +374,7 @@ module GMP {
 
 
     // returns true if we made a temp copy.
-    proc maybeCopy():(bool,mpz_t) {
+    proc ref maybeCopy():(bool,mpz_t) {
       if this.locale == here {
         return (false,this.mpz);
       } else {
@@ -387,7 +387,7 @@ module GMP {
     }
 
     // Assignment functions
-    proc ref set(a:BigInt)
+    proc ref set(ref a:BigInt)
     {
       on this {
         if a.locale == here {
@@ -398,7 +398,7 @@ module GMP {
         }
       }
     }
-    proc ref set(a:mpz_t)
+    proc ref set(ref a:mpz_t)
     {
       on this {
         if a.locale == here {
@@ -487,7 +487,7 @@ module GMP {
     }
 
     // Arithmetic functions
-    proc ref add(a:BigInt, b:BigInt)
+    proc ref add(ref a:BigInt, ref b:BigInt)
     {
       on this {
         var (acopy,a_) = a.maybeCopy();
@@ -1393,7 +1393,7 @@ module GMP {
     }
   }
 
-  /* Is auto copy needed? 
+  /* is this needed? 
   pragma "donor fn"
   pragma "auto copy fn"
   proc chpl__autoCopy(/*ref*/ x: BigInt) {
@@ -1402,7 +1402,8 @@ module GMP {
     chpl_gmp_get_mpz(ret.mpz, x.locale.id, x_mpz_struct);
     return ret;
 
-  }*/
+  }
+  */
 
   pragma "init copy fn"
   proc chpl__initCopy(/*ref */ x: BigInt) {
@@ -1420,7 +1421,7 @@ module GMP {
   proc BigInt.writeThis(writer:Writer) {
     var (acopy,a_) = this.maybeCopy();
     var tmp:c_string_copy;
-    chpl_gmp_mpz_get_str(10:c_int, a_);
+    tmp = chpl_gmp_mpz_get_str(10:c_int, a_);
     writer.write(tmp);
     chpl_free_c_string_copy(tmp);
     //gmp_asprintf(s, "%Zd", a_);
