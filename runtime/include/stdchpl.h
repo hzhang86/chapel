@@ -33,7 +33,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-#include "chpl_md.h"
+#include <chpl_md.h>
 
 #include "arg.h"
 #include "config.h"
